@@ -25,7 +25,6 @@ nbdist/
 .nb-gradle/
 out/
 
-.env
 gocd/server/ssh/**
 !gocd/server/ssh/put-ssh-keys-here
 .vagrant/

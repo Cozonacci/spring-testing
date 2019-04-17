@@ -1,0 +1,36 @@
+# Clean up the environment: previous images and containers
+#     >> docker container ls -a
+#     >> docker container rm CONTAINER_ID
+#     >> docker images
+#     >> docker image rm IMAGE_ID
+#
+# Build component image
+#     >> docker build --tag=spring-tests:latest .
+#
+# Deploy container stack
+#     >> docker stack deploy -c docker-stack.yml tests
+#
+# Tear down container stack
+#     >> docker stack rm tests
+#
+# Check container logs
+#     >> docker container logs CONTAINER_ID
+
+version: '3.3'
+
+services:
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+
+  rest-api:
+    image: spring-tests
+    ports:
+      - 8081:8080
+    depends_on:
+      - db
