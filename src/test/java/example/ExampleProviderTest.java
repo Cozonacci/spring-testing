@@ -35,7 +35,7 @@ public class ExampleProviderTest {
     @Mock
     private WeatherClient weatherClient;
 
-    private ExampleController exampleController;
+    private ControllerFacade controllerFacade;
 
     @TestTarget
     public final MockMvcTarget target = new MockMvcTarget();
@@ -43,8 +43,8 @@ public class ExampleProviderTest {
     @Before
     public void before() {
         initMocks(this);
-        exampleController = new ExampleController(personRepository, weatherClient);
-        target.setControllers(exampleController);
+        controllerFacade = new ControllerFacade(personRepository, weatherClient);
+        target.setControllers(controllerFacade);
     }
 
     @State("person data") // same as the "given()" part in our consumer test

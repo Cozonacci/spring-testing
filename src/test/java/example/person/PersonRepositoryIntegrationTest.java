@@ -20,12 +20,12 @@ public class PersonRepositoryIntegrationTest {
     private PersonRepository subject;
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         subject.deleteAll();
     }
 
     @Test
-    public void shouldSaveAndFetchPerson() throws Exception {
+    public void shouldSaveAndFetchPerson() {
         Person peter = new Person("Peter", "Pan");
         subject.save(peter);
 

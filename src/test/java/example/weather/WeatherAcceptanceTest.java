@@ -5,6 +5,7 @@ import example.helper.FileLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -23,13 +24,16 @@ public class WeatherAcceptanceTest {
     @LocalServerPort
     private int port;
 
+    @Value("${weather.api_secret}")
+    private String apiKey;
+
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8089);
 
 
     @Test
     public void shouldReturnYesterdaysWeather() throws Exception {
-        wireMockRule.stubFor(get(urlPathEqualTo("/some-test-api-key/53.5511,9.9937"))
+        wireMockRule.stubFor(get(urlPathEqualTo(String.format("/%s/53.5511,9.9937",apiKey)))
                 .willReturn(aResponse()
                         .withBody(FileLoader.read("classpath:weatherApiResponse.json"))
                         .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)

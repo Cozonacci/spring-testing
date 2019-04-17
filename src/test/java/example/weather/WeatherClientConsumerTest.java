@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,20 +28,23 @@ public class WeatherClientConsumerTest {
     @Autowired
     private WeatherClient weatherClient;
 
+    @Value("${weather.api_secret}")
+    private String apiKey;
+
     @Rule
     public PactProviderRuleMk2 weatherProvider = new PactProviderRuleMk2
             ("weather_provider", "localhost", 8089, this);
 
-    @Pact(consumer="sample_microservice")
+    @Pact(consumer = "sample_microservice")
     public RequestResponsePact createPact(PactDslWithProvider builder) throws IOException {
         return builder
                 .given("weather forecast data")
                 .uponReceiving("a request for a weather request for Hamburg")
-                    .path("/some-test-api-key/53.5511,9.9937")
-                    .method("GET")
+                .path(String.format("/%s/53.5511,9.9937", apiKey))
+                .method("GET")
                 .willRespondWith()
-                    .status(200)
-                    .body(FileLoader.read("classpath:weatherApiResponse.json"), ContentType.APPLICATION_JSON)
+                .status(200)
+                .body(FileLoader.read("classpath:weatherApiResponse.json"), ContentType.APPLICATION_JSON)
                 .toPact();
     }
 

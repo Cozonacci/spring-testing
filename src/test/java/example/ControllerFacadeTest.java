@@ -16,9 +16,9 @@ import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ExampleControllerTest {
+public class ControllerFacadeTest {
 
-    private ExampleController subject;
+    private ControllerFacade subject;
 
     @Mock
     private PersonRepository personRepository;
@@ -30,7 +30,7 @@ public class ExampleControllerTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        subject = new ExampleController(personRepository, weatherClient);
+        subject = new ControllerFacade(personRepository, weatherClient);
     }
 
     @Test

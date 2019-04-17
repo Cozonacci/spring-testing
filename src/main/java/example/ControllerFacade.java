@@ -5,20 +5,18 @@ import example.person.PersonRepository;
 import example.weather.WeatherClient;
 import example.weather.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-public class ExampleController {
+public class ControllerFacade {
 
     private final PersonRepository personRepository;
     private final WeatherClient weatherClient;
 
     @Autowired
-    public ExampleController(final PersonRepository personRepository, final WeatherClient weatherClient) {
+    public ControllerFacade(final PersonRepository personRepository, final WeatherClient weatherClient) {
         this.personRepository = personRepository;
         this.weatherClient = weatherClient;
     }
@@ -35,6 +33,18 @@ public class ExampleController {
         return foundPerson
                 .map(person -> String.format("Hello %s %s!", person.getFirstName(), person.getLastName()))
                 .orElse(String.format("Who is this '%s' you're talking about?", lastName));
+    }
+
+    @PostMapping(path = "/introduce", consumes = "application/json")
+    public String introduce(@RequestBody final Person person) {
+        Person personRecord;
+        try {
+            personRecord = personRepository.save(person);
+        } catch (Exception ex) {
+            return String.format("We're sorry %s, we failed to register you.", person.getFirstName());
+        }
+        return String.format("Nice to meet you, %s! Your registration number is %s.",
+                personRecord.getFirstName(), personRecord.getId());
     }
 
     @GetMapping("/weather")
